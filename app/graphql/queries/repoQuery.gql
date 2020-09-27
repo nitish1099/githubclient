@@ -1,0 +1,20 @@
+query { 
+  search(query: "Yelp", type: REPOSITORY, first: 10) {
+    repositoryCount,
+    pageInfo {
+      endCursor
+      startCursor
+    }
+    edges {
+      node {
+        ...on Repository {
+          name,
+          owner {
+            id,
+            login
+          }
+        }
+      }
+    }
+  }
+}

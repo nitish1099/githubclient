@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { View, Text, Button } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+  searchRepos
+} from '../actions';
 import { Container } from '../components';
 import theme from '../theme';
 
@@ -7,6 +12,11 @@ import theme from '../theme';
 class SearchRepoScreen extends Component {
   constructor(props) {
     super(props);
+  }
+  
+
+  componentDidMount() {
+    this.props.searchRepos();
   }
 
   render() {
@@ -19,4 +29,10 @@ class SearchRepoScreen extends Component {
 }
 
 
-export default SearchRepoScreen;
+const mapStateToProps = ({ repo }, ownProps) => {
+	return {
+		searchResult: repo.searchResult
+	};
+};
+
+export default connect(mapStateToProps, { searchRepos })(SearchRepoScreen);

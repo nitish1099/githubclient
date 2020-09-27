@@ -5,15 +5,20 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
+    "@apollo/client": "^3.2.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.9.0",
     "@react-navigation/native": "^5.7.4",
     "@react-navigation/stack": "^5.9.1",
+    "apollo-client": "^2.6.10",
+    "babel-plugin-import-graphql": "^2.7.0",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.11.0",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-app-auth": "^6.0.0",

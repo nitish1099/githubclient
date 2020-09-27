@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { TouchableNativeFeedback } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { View,  StatusBar, Button } from 'react-native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,7 +13,7 @@ import { createStore, applyMiddleware } from 'redux';
 import AuthScreen from './app/screens/AuthScreen';
 import SearchRepoScreen from './app/screens/SearchRepoScreen';
 import UserRepoScreen from './app/screens/UserRepoScreen';
-import WatchRepoScreen from './app/screens/WatchRepoScreen';
+import WatchRepoScreen from './app/screens/UserRepoScreen';
 
 //root reducer
 import rootReducer from './app/reducers';
@@ -25,6 +25,24 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+function getHeaderTitle(route) {
+  // If the focused route is not found, we need to assume it's the initial screen
+  // This can happen during if there hasn't been any navigation inside the screen
+  // In our case, it's "Feed" as that's the first screen inside the navigator
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'User';
+
+  switch (routeName) {
+    case 'User':
+      return 'User';
+    case 'Search':
+      return 'Search';
+    case 'Watching':
+      return 'Watching';
+  }
+}
+
+
   function Home() {
     return (
       <Tab.Navigator
@@ -39,6 +57,7 @@ export default function App() {
               iconName = focused ? 'eye' : 'eye-outline';
             }
 
+            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
@@ -61,6 +80,7 @@ export default function App() {
         <Tab.Screen name="User" component={UserRepoScreen} />
         <Tab.Screen name="Watching" component={WatchRepoScreen} />
         <Tab.Screen name="Search" component={SearchRepoScreen} />
+
       </Tab.Navigator>
     );
   }
@@ -68,9 +88,18 @@ export default function App() {
 	return (
 		// providing store to the navigator
 		<Provider store={store}>
-			<NavigationContainer> 
+      <View style={{ flex: 1 }}>
+        <StatusBar 
+          backgroundColor={theme.colors.darkGray}
+          barStyle="light-content"
+        />
+        <NavigationContainer> 
 				<Stack.Navigator screenOptions={{
-          headerShown: false
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: theme.colors.darkGray
+          },
+          headerTintColor: '#fff',
         }}>
           {store.getState().auth.isLoggedIn == true ? (
             <Stack.Screen
@@ -78,11 +107,17 @@ export default function App() {
               component={AuthScreen}
             />
           ) : (
-            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen 
+              name="Home" 
+              component={Home} 
+              options={({ route }) => ({
+                headerTitle: getHeaderTitle(route)
+              })} 
+            />
           )}
-					
 				</Stack.Navigator>
 			</NavigationContainer>
+      </View>
 		</Provider>
 	);
 }
