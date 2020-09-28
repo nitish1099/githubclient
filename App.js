@@ -9,18 +9,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 //import logger from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
 //screens
 import AuthScreen from './app/screens/AuthScreen';
 import SearchRepoScreen from './app/screens/SearchRepoScreen';
 import UserRepoScreen from './app/screens/UserRepoScreen';
 import WatchRepoScreen from './app/screens/UserRepoScreen';
-
 //root reducer
 import rootReducer from './app/reducers';
 import theme from './app/theme';
 
 // creating store from the reducers
-const store = createStore(rootReducer, {}, applyMiddleware(ReduxThunk));
+const store = createStore(rootReducer, {}, applyMiddleware(ReduxThunk, logger));
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -35,8 +35,8 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'User':
       return 'User';
-    case 'Search':
-      return 'Search';
+    case 'Explore':
+      return 'Explore';
     case 'Watching':
       return 'Watching';
   }
@@ -51,7 +51,7 @@ function getHeaderTitle(route) {
             let iconName;
             if (route.name === 'User') {
               iconName = focused ? 'person' : 'person-outline';
-            } else if (route.name === 'Search') {
+            } else if (route.name === 'Explore') {
               iconName = focused ? 'search' : 'search-outline';
             } else {
               iconName = focused ? 'eye' : 'eye-outline';
@@ -79,7 +79,7 @@ function getHeaderTitle(route) {
       >
         <Tab.Screen name="User" component={UserRepoScreen} />
         <Tab.Screen name="Watching" component={WatchRepoScreen} />
-        <Tab.Screen name="Search" component={SearchRepoScreen} />
+        <Tab.Screen name="Explore" component={SearchRepoScreen} />
 
       </Tab.Navigator>
     );
@@ -97,7 +97,9 @@ function getHeaderTitle(route) {
 				<Stack.Navigator screenOptions={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: theme.colors.darkGray
+            backgroundColor: theme.colors.darkGray,
+            borderWidth: 0,
+            elevation: 0
           },
           headerTintColor: '#fff',
         }}>

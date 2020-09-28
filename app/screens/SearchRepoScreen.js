@@ -1,28 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, FlatList } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   searchRepos
 } from '../actions';
-import { Container } from '../components';
+import { 
+  Container, 
+  SearchBar, 
+  RepoListItem, 
+  RepoListItemSeperator 
+} from '../components';
 import theme from '../theme';
 
 
 class SearchRepoScreen extends Component {
   constructor(props) {
     super(props);
+    this.timeout = 0;
+    this._onSearchTextChange = this._onSearchTextChange.bind(this);
   }
-  
 
-  componentDidMount() {
-    this.props.searchRepos();
+  _onSearchTextChange = (text) => {
+    if(this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.props.searchRepos(text);
+    }, 500);
   }
 
   render() {
+    const { organizations, repositories, users} = this.props.searchResult;
     return (
       <Container>
-        <Text> SearchRepoScreen </Text>
+        <SearchBar onChange={this._onSearchTextChange}/>
+        <FlatList
+          data={repositories ? Object.keys(repositories) : []}
+          renderItem={({item}) => 
+            <RepoListItem
+              organizations={organizations}
+              repositories={repositories}
+              users={users} 
+              currentRepository={item}
+            />
+          }
+          ItemSeparatorComponent={() => <RepoListItemSeperator />}
+        >
+
+        </FlatList>
       </Container>
     );
   }

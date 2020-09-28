@@ -21,10 +21,10 @@ const config = {
 class AuthScreen extends Component {
     constructor(props) {
         super(props);
-        this.onAuthPress = this.onAuthPress.bind(this);
+        this._onAuthPress = this._onAuthPress.bind(this);
     }
 
-    async onAuthPress() {
+    async _onAuthPress() {
         try {
             const result = await authorize(config);
             // result includes accessToken, accessTokenExpirationDate and refreshToken
@@ -38,7 +38,7 @@ class AuthScreen extends Component {
             <Container style={styles.container}>
                 <Text style={styles.text}>AuthScreen</Text>
                 <Image source={theme.images.logo} style={styles.logo}></Image>
-                <TouchableWithoutFeedback onPress={this.onAuthPress}>
+                <TouchableWithoutFeedback onPress={this._onAuthPress}>
                     <View style={styles.authButton}>
                         <Text style={styles.authButtonText}>SIGN IN</Text>
                     </View>
