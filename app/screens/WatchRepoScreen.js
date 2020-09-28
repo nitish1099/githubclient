@@ -5,17 +5,17 @@ import theme from '../theme';
 
 
 class WatchRepoScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    return (
-      <Container>
-        <Text> SearchRepoScreen </Text>
-      </Container>
-    );
-  }
+    render() {
+        return (
+            <Container>
+                <Text> SearchRepoScreen </Text>
+            </Container>
+        );
+    }
 }
 
 

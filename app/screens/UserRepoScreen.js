@@ -4,17 +4,17 @@ import { Container } from '../components';
 
 
 class UserRepoScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    return (
-      <Container>
-        <Text> UserRepoScreen </Text>
-      </Container>
-    );
-  }
+    render() {
+        return (
+            <Container>
+                <Text> UserRepoScreen </Text>
+            </Container>
+        );
+    }
 }
 
 export default UserRepoScreen;

@@ -1,0 +1,43 @@
+query{
+  node(id: "MDEwOlJlcG9zaXRvcnkxNzIzNzQ=") {
+    id,
+    __typename,
+    ...on Repository {
+    pullRequests {
+        __typename,
+     	totalCount 
+   	},
+    stargazerCount,
+    licenseInfo {
+      	__typename,
+      	name
+    }
+    watchers {
+      	__typename,
+      	totalCount
+    }
+    homepageUrl,
+    name,
+    description,
+    isInOrganization,
+    owner {
+      	__typename,
+      	id,
+		avatarUrl,
+      	login
+    },
+    forkCount,
+    description,
+    issues(first: 5, filterBy: { states: CLOSED}, orderBy: { field: CREATED_AT, direction: DESC }) {
+		totalCount,
+		edges {
+			node {
+			__typename,
+			id,
+			title
+			}
+		}
+    }
+    }
+  }
+}

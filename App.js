@@ -15,6 +15,7 @@ import AuthScreen from './app/screens/AuthScreen';
 import SearchRepoScreen from './app/screens/SearchRepoScreen';
 import UserRepoScreen from './app/screens/UserRepoScreen';
 import WatchRepoScreen from './app/screens/UserRepoScreen';
+import RepoDetailScreen from './app/screens/RepoDetailScreen';
 //root reducer
 import rootReducer from './app/reducers';
 import theme from './app/theme';
@@ -80,7 +81,6 @@ function getHeaderTitle(route) {
         <Tab.Screen name="User" component={UserRepoScreen} />
         <Tab.Screen name="Watching" component={WatchRepoScreen} />
         <Tab.Screen name="Explore" component={SearchRepoScreen} />
-
       </Tab.Navigator>
     );
   }
@@ -111,12 +111,16 @@ function getHeaderTitle(route) {
           ) : (
             <Stack.Screen 
               name="Home" 
-              component={Home} 
+              component={RepoDetailScreen} 
               options={({ route }) => ({
                 headerTitle: getHeaderTitle(route)
               })} 
             />
           )}
+          <Stack.Screen 
+            name="RepoDetail" 
+            component={RepoDetailScreen}
+          />
 				</Stack.Navigator>
 			</NavigationContainer>
       </View>

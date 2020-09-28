@@ -11,6 +11,7 @@ query SearchRepos($query: String!){
           	color,
             name
           },
+		  isInOrganization,
           owner {
             id,
             login,

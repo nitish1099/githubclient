@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import theme from '../theme';
 
 
-const RepoListItemSeperatorComponent = ({
+const SeperatorComponent = ({
     style,
 }) => (
     <View style={styles.container} />
@@ -16,4 +16,4 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.blueGrayLight,
     }
 });
-export { RepoListItemSeperatorComponent as RepoListItemSeperator };
+export { SeperatorComponent as Seperator };

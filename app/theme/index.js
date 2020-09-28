@@ -6,9 +6,12 @@ export default {
         darkGray: 'rgb(23, 24, 28)',
         blueGray: 'rgb(108, 111, 126)',
         blueGrayLight: 'rgba(108, 111, 126, 0.5)',
-        yellow: 'rgb(255, 213, 79)'
+		yellow: 'rgb(255, 213, 79)',
+		darkBlueGray: 'rgb(31, 31, 36)',
+		blue: 'rgb(13,110,219)'
     },
     images: {
-        logo: require('./images/github-logo.png'),
+		logo: require('./images/github-logo.png'),
+		link: require('./images/link-icon.png')
     },
 };

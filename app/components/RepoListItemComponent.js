@@ -51,13 +51,13 @@ const RepoLitItemComponent = ({
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 140,
+        minHeight: 140,
         backgroundColor: theme.colors.darkGray,
         padding: 15
     },
     orgDetails: {
         flexDirection: 'row',
-        alignItems: 'center'
+		alignItems: 'center'
     },
     orgLogo: {
         width: 20,
@@ -67,9 +67,11 @@ const styles = StyleSheet.create({
     orgName: {
         fontSize: 16,
         color: theme.colors.blueGray,
-        marginLeft: 5,
-        marginTop: 5
-    },
+        marginLeft: 5
+	},
+	repoDetails: {
+		marginTop: 5
+	},
     repoName: {
         fontSize: 16,
         color: theme.colors.white
