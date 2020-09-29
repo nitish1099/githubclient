@@ -3,9 +3,9 @@ import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import theme from '../theme';
 
 const ButtonComponent = ({
-	children, style
+	children, style, disabled, onPress
 }) => (
-	<TouchableWithoutFeedback>
+	<TouchableWithoutFeedback onPress={onPress} disabled={disabled}>
 		<View style={[styles.button, style]}>
 			{children}
 		</View>

@@ -13,7 +13,7 @@ query{
       	name
     }
     watchers {
-      	__typename,
+     	 __typename,
       	totalCount
     }
     homepageUrl,
@@ -28,15 +28,21 @@ query{
     },
     forkCount,
     description,
-    issues(first: 5, filterBy: { states: CLOSED}, orderBy: { field: CREATED_AT, direction: DESC }) {
-		totalCount,
-		edges {
-			node {
-			__typename,
-			id,
-			title
-			}
-		}
+    issues(first: 5, filterBy: { states: OPEN }, orderBy: { field: CREATED_AT, direction: DESC }) {
+      totalCount,
+      edges {
+        node {
+          __typename,
+          id,
+          title,
+          publishedAt,
+          number,
+          comments {
+            __typename,
+            totalCount
+          }
+        }
+      }
     }
     }
   }

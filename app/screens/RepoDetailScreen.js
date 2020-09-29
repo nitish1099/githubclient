@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getRepoDetails } from '../actions';
-import { Container, Button, Seperator } from '../components';
+import { Container, Button, Seperator, IssueListItem } from '../components';
 import theme from '../theme';
+import { FlatList } from 'react-native-gesture-handler';
+
 class RepoDetailScreen extends Component {
+
     constructor(props) {
         super(props);
     }
 
 	componentDidMount() {
 		this.props.getRepoDetails();
+		this.props.navigation.setOptions({ 
+			headerTitle: 'hello',
+			headerRight: () => <Text>Hello</Text>
+		});
 	}
 
 	_formatNumber(number) {
@@ -78,7 +85,7 @@ class RepoDetailScreen extends Component {
 				<View>
 					<View style={styles.repoStat}>
 						<Text style={styles.statTitle}>Issues</Text>
-						<Text style={styles.statValue}>{this._formatNumber(1823)}</Text>
+						<Text style={styles.statValue}>{this._formatNumber(this.props.repository.issues.totalCount)}</Text>
 					</View>
 					<View style={styles.repoStat}>
 						<Text style={styles.statTitle}>Pull Requests</Text>
@@ -98,25 +105,43 @@ class RepoDetailScreen extends Component {
 	}
 
 	_renderRepoIssues() {
-		
+		return (
+			<FlatList
+				data={this.props.issues ? Object.keys(this.props.issues) : []}
+				renderItem={({ item }) =>
+					<IssueListItem
+						currentIssue={item}
+						issues={this.props.issues}
+						owner={this.props.owner}
+						repository={this.props.repository}
+					/>
+				}
+				ItemSeparatorComponent={() => <Seperator />}
+			/>
+		)
 	}
 
     render() {
         return (
             <Container>
-                <View style={styles.repoInfoContainer}>
-					{this._renderRepoOwnerInfo()}
-					{this._renderRepoDetails()}
-					{this._renderRepoWatchButton()}
-                </View>
-				<Seperator />
-				<View style={styles.repoStatsContainer}>
-					{this._renderRepoStats()}
-				</View>
-				<Seperator />
-				<View style={styles.repoIssuesContainer}>
-					{this._renderRepoIssues()}
-				</View>
+				<ScrollView>
+					<View style={styles.repoInfoContainer}>
+						{this._renderRepoOwnerInfo()}
+						{this._renderRepoDetails()}
+						{this._renderRepoWatchButton()}
+					</View>
+					<Seperator />
+					<View style={styles.repoStatsContainer}>
+						{this._renderRepoStats()}
+					</View>
+					<View style={styles.repoIssuesContainer}>
+						<View style={styles.repoIssueHeader}>
+							<Text style={styles.headerTitle}>Issues</Text>
+							<Ionicons color={theme.colors.blue} size={25} name={'add-circle-outline'} />
+						</View>
+						{this._renderRepoIssues()}
+					</View>
+				</ScrollView>
             </Container>
         );
     }
@@ -204,6 +229,20 @@ const styles = StyleSheet.create({
 	statValue: {
 		fontSize: 16,
 		color: theme.colors.blueGray
+	},
+	repoIssuesContainer: {
+		marginTop: 10,
+		backgroundColor: theme.colors.darkGray
+	},
+	repoIssueHeader: {
+		padding: 15,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	headerTitle: {
+		fontSize: 26,
+		color: theme.colors.white
 	}
 });
 

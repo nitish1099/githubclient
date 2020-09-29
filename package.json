@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^5.9.1",
     "apollo-client": "^2.6.10",
     "babel-plugin-import-graphql": "^2.7.0",
+    "dayjs": "^1.9.1",
     "graphql": "^15.3.0",
     "graphql-normalizr": "^2.10.1",
     "graphql-tag": "^2.11.0",

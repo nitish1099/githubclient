@@ -18,6 +18,7 @@ const RepoLitItemComponent = ({
 
     return (
         <View style={styles.container}>
+			{/* Display repo owner details */}
             <View style={styles.orgDetails}>
                 <Image 
                     source={{uri: author.avatarUrl}} 
@@ -25,18 +26,20 @@ const RepoLitItemComponent = ({
                 />
                 <Text style={styles.orgName}>{author.login}</Text>
             </View>
+			{/* Display repo name and short description */}
             <View style={styles.repoDetails}>
                 <Text style={styles.repoName}>{repo.name}</Text>
                 <Text numberOfLines={3} style={styles.repoDesc}>{repo.description}</Text>
             </View>
+			{/* Display stargazers count for the repo */}
             <View style={styles.repoStats}>
                 <View style={styles.repoStars}>
                     <Octicons name="star" color={theme.colors.yellow} size={20} />
                     <Text style={styles.starCount}>{repo.stargazerCount}</Text>
                 </View>
+				{/* Display repo primary language if exists */}
                 {
                     repo.primaryLanguage &&
-                    
                     <View style={styles.repoLanguage}>
                         <View style={[styles.dot, { backgroundColor: repo.primaryLanguage.color }]} />
                         <Text style={styles.starCount}>{repo.primaryLanguage.name}</Text>

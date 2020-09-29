@@ -22,6 +22,7 @@ class SearchRepoScreen extends Component {
     }
 
     _onSearchTextChange = (text) => {
+		//add delay of 500ms to detect when user stops typing
         if (this.timeout) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
             this.props.searchRepos(text);
