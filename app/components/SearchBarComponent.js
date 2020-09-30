@@ -9,7 +9,9 @@ const SearchBarComponent = ({
     <View style={[styles.container, style]}>
         <TextInput 
             style={styles.input}
-            placeholder="Search Github"
+			placeholder="Search Github"
+			selectionColor={theme.colors.blue}
+			autoCapitalize={'none'}
             underlineColorAndroid={theme.colors.blueGray}
             placeholderTextColor={theme.colors.blueGray}
             onChangeText={val => onChange(val)}

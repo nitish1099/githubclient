@@ -1,0 +1,15 @@
+mutation CreateIssue($title: String!, $repositoryId: ID!, $body: String) {
+  createIssue(input: { title: $title, repositoryId: $repositoryId, body: $body}) {
+    issue {
+      __typename,
+      id,
+      title,
+      publishedAt,
+      number,
+      comments {
+        __typename,
+        totalCount
+      }
+    }
+  }
+}

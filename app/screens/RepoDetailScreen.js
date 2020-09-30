@@ -1,30 +1,36 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getRepoDetails } from '../actions';
-import { Container, Button, Seperator, IssueListItem } from '../components';
+import { getRepoDetails, watchRepo } from '../actions';
+import { Container, Button, Seperator, IssueListItem, Loader } from '../components';
 import theme from '../theme';
 import { FlatList } from 'react-native-gesture-handler';
 
 class RepoDetailScreen extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+	constructor(props) {
+		super(props);
+		this._onWatchRepoPress = this._onWatchRepoPress.bind(this);
+		this._onAddIssuePress = this._onAddIssuePress.bind(this);
+	}
 
 	componentDidMount() {
-		this.props.getRepoDetails();
-		this.props.navigation.setOptions({ 
-			headerTitle: 'hello',
-			headerRight: () => <Text>Hello</Text>
-		});
+		if (this.props.route.params) {
+			this.props.getRepoDetails(this.props.route.params.repoId);
+			//set header title as the repo name
+			this.props.navigation.setOptions({
+				headerTitle: this.props.route.params.repoName
+			});
+		}
+		
 	}
 
 	_formatNumber(number) {
+		// format 1200 as 1.2k
 		if (number > 1000) {
-			return `${Math.round(number/1000 * 10) / 10}k`
+			return `${Math.round(number / 1000 * 10) / 10}k`
 		}
 		return number;
 	}
@@ -33,9 +39,9 @@ class RepoDetailScreen extends Component {
 		if (!this.props.loading && this.props.owner) {
 			return (
 				<View style={styles.ownerContainer}>
-					<Image 
-						style={styles.avatar} 
-						source={{uri: this.props.owner.avatarUrl}}
+					<Image
+						style={styles.avatar}
+						source={{ uri: this.props.owner.avatarUrl }}
 					/>
 					<Text style={styles.ownerName}>{this.props.owner.login}</Text>
 				</View>
@@ -43,16 +49,40 @@ class RepoDetailScreen extends Component {
 		}
 	}
 
+	_onWatchRepoPress() {
+		if (!this.props.isWatched) {
+			this.props.watchRepo(
+				this.props.selected.repositories,
+				this.props.selected.organizations,
+				this.props.selected.users,
+				this.props.userID
+			);
+		}
+		
+	}
+
+	_onAddIssuePress() {
+		this.props.navigation.navigate('CreateIssue');
+	}
+
+	_renderRepoHomepageLink() {
+		if (this.props.repository.homepageUrl) {
+			return (
+				<View style={styles.repoLinkContainer}>
+					<Octicons name="link" color={theme.colors.blueGray} size={18} />
+					<Text style={styles.linkUrl}>{this.props.repository.homepageUrl}</Text>
+				</View>
+			)
+		}
+	}
+
 	_renderRepoDetails() {
-		if (!this.props.loading && this.props.repository) {
+		if (this.props.repository) {
 			return (
 				<View style={styles.repoDetailContainer}>
 					<Text style={styles.repoName}>{this.props.repository.name}</Text>
 					<Text style={styles.repoDesc}>{this.props.repository.description}</Text>
-					<View style={styles.repoLinkContainer}>
-						<Octicons name="link" color={theme.colors.blueGray} size={18} />
-						<Text style={styles.linkUrl}>{this.props.repository.homepageUrl}</Text>
-					</View>
+					{this._renderRepoHomepageLink()}
 					<View style={styles.repoStarsAndForksContainer}>
 						<View style={styles.repoStarContainer}>
 							<Octicons name="star" color={theme.colors.blueGray} size={18} />
@@ -69,18 +99,32 @@ class RepoDetailScreen extends Component {
 	}
 
 	_renderRepoWatchButton() {
-		if(!this.props.loading && this.props.repository) {
+		//set active color on button if already watching
+		if (this.props.repository) {
+			const color = this.props.isWatched ? theme.colors.green : theme.colors.blue;
+			const text = this.props.isWatched ? 'Watching' : 'Watch';
 			return (
-				<Button style={{ marginTop: 30 }}>
-					<Ionicons name="eye-outline" size={18} color={theme.colors.blue}/>
-					<Text style={styles.watchButtonText}>Watch</Text>
+				<Button style={{ marginTop: 30 }} onPress={this._onWatchRepoPress}>
+					<Ionicons name="eye-outline" size={18} color={color} />
+					<Text style={[styles.watchButtonText, { color }]}>{text}</Text>
 				</Button>
 			);
 		}
 	}
 
+	_renderRepoLicenseStat() {
+		if (this.props.repository.license) {
+			return (
+				<View style={[styles.repoStat, { marginBottom: 0 }]}>
+					<Text style={styles.statTitle}>License</Text>
+					<Text style={styles.statValue}>{this.props.repository.licenseInfo.name}</Text>
+				</View>
+			)
+		}
+	}
+
 	_renderRepoStats() {
-		if(!this.props.loading && this.props.repository) {
+		if (this.props.repository) {
 			return (
 				<View>
 					<View style={styles.repoStat}>
@@ -95,10 +139,7 @@ class RepoDetailScreen extends Component {
 						<Text style={styles.statTitle}>Watchers</Text>
 						<Text style={styles.statValue}>{this._formatNumber(this.props.repository.watchers.totalCount)}</Text>
 					</View>
-					<View style={[styles.repoStat, { marginBottom: 0 }]}>
-						<Text style={styles.statTitle}>License</Text>
-						<Text style={styles.statValue}>{this.props.repository.licenseInfo.name}</Text>
-					</View>
+					{this._renderRepoLicenseStat()}
 				</View>
 			);
 		}
@@ -106,26 +147,33 @@ class RepoDetailScreen extends Component {
 
 	_renderRepoIssues() {
 		return (
-			<FlatList
-				data={this.props.issues ? Object.keys(this.props.issues) : []}
-				renderItem={({ item }) =>
-					<IssueListItem
-						currentIssue={item}
-						issues={this.props.issues}
-						owner={this.props.owner}
-						repository={this.props.repository}
-					/>
+			Object.keys(this.props.issues || []).map((item, index) => {
+				if (index < 5) {
+					return (
+						<View>
+							<IssueListItem
+								currentIssue={item}
+								issues={this.props.issues}
+								owner={this.props.owner}
+								repository={this.props.repository}
+							/>
+							{ index < 4 && <Seperator />}
+
+						</View>
+
+					)
 				}
-				ItemSeparatorComponent={() => <Seperator />}
-			/>
+			})
 		)
 	}
 
-    render() {
-        return (
-            <Container>
-				<ScrollView>
-					<View style={styles.repoInfoContainer}>
+	_renderRepoOnLoad() {
+		if (this.props.loading) {
+			return <Loader />
+		}
+		return (
+			<ScrollView>
+				<View style={styles.repoInfoContainer}>
 						{this._renderRepoOwnerInfo()}
 						{this._renderRepoDetails()}
 						{this._renderRepoWatchButton()}
@@ -137,14 +185,26 @@ class RepoDetailScreen extends Component {
 					<View style={styles.repoIssuesContainer}>
 						<View style={styles.repoIssueHeader}>
 							<Text style={styles.headerTitle}>Issues</Text>
-							<Ionicons color={theme.colors.blue} size={25} name={'add-circle-outline'} />
+							<TouchableWithoutFeedback onPress={this._onAddIssuePress}>
+								<View>
+									<Ionicons color={theme.colors.blue} size={25} name={'add-circle-outline'} />
+								</View>
+							</TouchableWithoutFeedback>
 						</View>
 						{this._renderRepoIssues()}
 					</View>
-				</ScrollView>
-            </Container>
-        );
-    }
+			</ScrollView>
+			
+		)
+	}
+
+	render() {
+		return (
+			<Container>
+				{this._renderRepoOnLoad()}
+			</Container>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
@@ -246,15 +306,25 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ repo }, ownProps) => {
+const mapStateToProps = ({ repo, auth, watch }, ownProps) => {
+	if (repo.selected && repo.selected.repositories) {
+		console.log(repo.selected.id, repo.selected.repositories);
+	}
+	//get watched repos by the user
+	const userID = auth.user.id;
+	const watchedRepos = watch.userWatchedRepos.find(repo => repo.userID === userID);
+	const isWatched = repo.selected && watchedRepos ? watchedRepos.list.repositories.hasOwnProperty(repo.selected.id) : false;
 	return {
+		userID,
 		loading: repo.infoLoading,
-		repository: repo.selected && repo.selected.repositories[repo.selected.id],
-		owner: repo.selected && repo.selected.repositories[repo.selected.id].isInOrganization ? 
-		repo.selected && repo.selected.organizations[repo.selected.repositories[repo.selected.id].owner] : 
-		repo.selected && repo.selected.users[repo.selected.repositories[repo.selected.id].owner],
-		issues: repo.selected && repo.selected.issues
-    };
+		selected: repo.selected,
+		repository: repo.selected && repo.selected.repositories && repo.selected.repositories[repo.selected.id],
+		owner: repo.selected && repo.selected.repositories && repo.selected.repositories[repo.selected.id].isInOrganization ?
+			repo.selected && repo.selected.repositories && repo.selected.organizations[repo.selected.repositories[repo.selected.id].owner] :
+			repo.selected && repo.selected.repositories && repo.selected.users[repo.selected.repositories[repo.selected.id].owner],
+		issues: repo.selected && repo.selected.issues,
+		isWatched
+	};
 };
 
-export default connect(mapStateToProps, { getRepoDetails })(RepoDetailScreen);
+export default connect(mapStateToProps, { getRepoDetails, watchRepo })(RepoDetailScreen);

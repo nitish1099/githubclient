@@ -3,7 +3,10 @@ import {
 	LOGIN_FORM_UPDATE,
 	REGISTER_FORM_UPDATE,
 	LOGIN_USER_SUCCESS,
-	LOGIN_USER_FAIL, REGISTER_USER_FAIL, REGISTER_USER_SUCCESS
+	LOGIN_USER_FAIL, 
+	REGISTER_USER_FAIL, 
+	REGISTER_USER_SUCCESS,
+	LOGOUT_USER
 } from './types';
 
 export const loginFormUpdate = (value, type) => {
@@ -48,7 +51,13 @@ export const register = (username, password, users) => {
 	} else {
 		return {
 			type: REGISTER_USER_SUCCESS,
-			payload: { user: { ...user, id: users.length } }
+			payload: { user: { username, password, id: users.length + 1  } }
 		}
+	}
+}
+
+export const logout = () => {
+	return {
+		type: LOGOUT_USER
 	}
 }

@@ -3,12 +3,19 @@ import { GraphQLNormalizr } from 'graphql-normalizr';
 import {
     SEARCH_REPO_START,
 	SEARCH_REPO_SUCCESS,
+	SEARCH_REPO_FAIL,
 	GET_REPO_DETAILS_START,
-	GET_REPO_DETAILS_SUCCESS
+	GET_REPO_DETAILS_SUCCESS, 
+	GET_REPO_DETAILS_FAIL,
+	ISSUE_FORM_UPDATE, 
+	CREATE_ISSUE_START, 
+	CREATE_ISSUE_SUCCESS,
+	CREATE_ISSUE_FAIL
 } from './types';
 import { Client } from '../graphql';
-import repoQuery from '../graphql/queries/repoQuery.gql';
+import repoQuery from '../graphql/queries/repoSearchQuery.gql';
 import repoDetailQuery from '../graphql/queries/repoDetailQuery.gql';
+import createIssueMutation from '../graphql/mutations/createIssueMutation.gql';
 
 const { normalize } = new GraphQLNormalizr();
 
@@ -21,7 +28,6 @@ export const searchRepos = (text) => async dispatch => {
         variables: { query: text }
     })
     .then(response => {
-		console.log(response);
         const result = normalize(response);
         dispatch({
             type: SEARCH_REPO_SUCCESS,
@@ -29,28 +35,64 @@ export const searchRepos = (text) => async dispatch => {
         });
     })
     .catch(error => {
-        console.log(error);
+		dispatch({
+			type: SEARCH_REPO_FAIL
+		});
         Alert.alert('Something went wrong!');
     });
 };
 
-export const getRepoDetails = () => async dispatch => {
+export const getRepoDetails = (repoId) => async dispatch => {
+	console.log(repoId);
 	dispatch({
 		type: GET_REPO_DETAILS_START
 	})
 	Client.query({
-        query: repoDetailQuery
+		query: repoDetailQuery,
+		variables: { id: repoId }
     })
     .then(response => {
-		console.log(response);
         const result = normalize(response);
         dispatch({
             type: GET_REPO_DETAILS_SUCCESS,
-            payload: { result }
+            payload: { result, repoId }
         });
     })
     .catch(error => {
-        console.log(error);
+		dispatch({
+			type: GET_REPO_DETAILS_FAIL
+		});
+        Alert.alert('Something went wrong!');
+    });
+}
+
+export const issueFormUpdate = (value, type) => {
+	return {
+		type: ISSUE_FORM_UPDATE,
+		payload: { value, type }
+	}
+}
+
+export const createIssue = (repositoryId, title, body, navigation) => async dispatch => {
+	dispatch({
+		type: CREATE_ISSUE_START
+	})
+	Client.mutate({
+		mutation: createIssueMutation,
+		variables: { repositoryId, title, body }
+    })
+    .then(response => {
+        const result = normalize(response);
+        dispatch({
+            type: CREATE_ISSUE_SUCCESS,
+            payload: { result, repoId: repositoryId }
+		});
+		navigation.goBack();
+    })
+    .catch(error => {
+        dispatch({
+			type: CREATE_ISSUE_FAIL
+		});
         Alert.alert('Something went wrong!');
     });
 }

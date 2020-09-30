@@ -1,5 +1,5 @@
-query{
-  node(id: "MDEwOlJlcG9zaXRvcnkxNzIzNzQ=") {
+query FindRepoByID($id: ID!){
+  node(id: $id) {
     id,
     __typename,
     ...on Repository {
@@ -19,6 +19,10 @@ query{
     homepageUrl,
     name,
     description,
+	primaryLanguage {
+		color,
+		name
+	}
     isInOrganization,
     owner {
       	__typename,

@@ -8,9 +8,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import SearchRepoScreen from './screens/SearchRepoScreen';
-import UserRepoScreen from './screens/UserRepoScreen';
-import WatchRepoScreen from './screens/UserRepoScreen';
+import UserScreen from './screens/UserScreen';
+import WatchRepoScreen from './screens/WatchRepoScreen';
 import RepoDetailScreen from './screens/RepoDetailScreen';
+import CreateIssueScreen from './screens/CreateIssueScreen';
 import theme from './theme';
 
 //auth stack, if user is not authenticated
@@ -88,10 +89,10 @@ Routes = (props) => {
 					}
 				}}
 
-			>
-				<Tab.Screen name="User" component={UserRepoScreen} />
-				<Tab.Screen name="Watching" component={WatchRepoScreen} />
+			>	
 				<Tab.Screen name="Explore" component={SearchRepoScreen} />
+				<Tab.Screen name="Watching" component={WatchRepoScreen} />
+				<Tab.Screen name="User" component={UserScreen} />
 			</Tab.Navigator>
 		);
 	}
@@ -136,6 +137,13 @@ Routes = (props) => {
 				<mainStack.Screen
 					name="RepoDetail"
 					component={RepoDetailScreen}
+				/>
+				<mainStack.Screen
+					name="CreateIssue"
+					component={CreateIssueScreen}
+					options={() => ({
+						headerTitle: 'Create Issue'
+					})}
 				/>
 			</mainStack.Navigator>
 		)

@@ -4,7 +4,8 @@ import {
 	LOGIN_USER_FAIL, 
 	REGISTER_FORM_UPDATE,
 	REGISTER_USER_SUCCESS, 
-	REGISTER_USER_FAIL
+	REGISTER_USER_FAIL, 
+	LOGOUT_USER
 
 } from '../actions/types';
 
@@ -40,6 +41,7 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				user: action.payload.user,
+				login: INITIAL_STATE.login,
 				isLoggedIn: true
 			}
 		case LOGIN_USER_FAIL:
@@ -60,12 +62,19 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				user: action.payload.user,
 				isLoggedIn: true,
-				registeredUsers: [...registeredUsers, action.payload.user]
+				register: INITIAL_STATE.register,
+				registeredUsers: [...state.registeredUsers, action.payload.user]
 			}
 		case REGISTER_USER_FAIL:
 			return {
 				...state,
 				register: { ...INITIAL_STATE.register }
+			}
+		case LOGOUT_USER:
+			return {
+				...state,
+				user: null,
+				isLoggedIn: false
 			}
 		default:
 			return state;

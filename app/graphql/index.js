@@ -6,7 +6,7 @@ const Client = new ApolloClient({
   uri: config.BASE_URL,
   cache: new InMemoryCache(),
   headers: {
-    authorization: 'Bearer 5086540aed4900d2a466e403e87c7282e5a9a747',
+    authorization: `Bearer ${config.GIT_TOKEN}`,
   }
 });
 

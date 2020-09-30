@@ -21,12 +21,15 @@ class LoginScreen extends Component {
 		)
 	}
 	
+	//navigate to register screen
 	_onNewUserPress() {
 		this.props.navigation.navigate('Register');
 	}
 
     render() {
+		//check to disable the login button if password and username empty
 		const disabled = !(this.props.password && this.props.username);
+
         return (
             <Container style={styles.container}>
                 <Text style={styles.text}>AuthScreen</Text>
@@ -36,6 +39,8 @@ class LoginScreen extends Component {
 						style={styles.textInput}
 						placeholder={'Username'}
 						value={this.props.username}
+						selectionColor={theme.colors.blue}
+						autoCapitalize={'none'}
 						onChangeText={text => this.props.loginFormUpdate(text, 'username')}
 					/>
 					<Text></Text>
@@ -45,6 +50,7 @@ class LoginScreen extends Component {
 						style={styles.textInput}
 						placeholder={'Password'}
 						value={this.props.password}
+						selectionColor={theme.colors.blue}
 						onChangeText={text => this.props.loginFormUpdate(text, 'password')}
 						secureTextEntry
 					/>

@@ -9,10 +9,10 @@ import theme from '../theme';
 class RegisterScreen extends Component {
     constructor(props) {
         super(props);
-        this._onregisterPress = this._onregisterPress.bind(this);
+        this._onRegisterPress = this._onRegisterPress.bind(this);
     }
 
-    _onregisterPress() {
+    _onRegisterPress() {
 		this.props.register(
 			this.props.username, 
 			this.props.password,
@@ -21,6 +21,7 @@ class RegisterScreen extends Component {
     }
 
     render() {
+		//check to disable the register button if password and username empty
 		const disabled = !(this.props.password && this.props.username);
         return (
             <Container style={styles.container}>
@@ -30,6 +31,8 @@ class RegisterScreen extends Component {
 					<TextInput 
 						style={styles.textInput}
 						placeholder={'Username'}
+						autoCapitalize={'none'}
+						selectionColor={theme.colors.blue}
 						value={this.props.username}
 						onChangeText={text => this.props.registerFormUpdate(text, 'username')}
 					/>
@@ -48,7 +51,7 @@ class RegisterScreen extends Component {
 				
 				<Button 
 					style={styles.registerButton} 
-					onPress={this._onregisterPress}
+					onPress={this._onRegisterPress}
 					disabled={disabled}
 				>
 					<Text 

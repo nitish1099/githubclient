@@ -5,9 +5,19 @@ export const LOGIN_USER_FAIL = 'login_user_fail';
 export const REGISTER_FORM_UPDATE = 'register_form_update';
 export const REGISTER_USER_SUCCESS = 'register_user_success';
 export const REGISTER_USER_FAIL = 'register_user_fail';
-
+export const LOGOUT_USER = 'logout_user';
 // repo actions type constants
 export const SEARCH_REPO_START = 'search_repo_start';
 export const SEARCH_REPO_SUCCESS = 'search_repo_success';
+export const SEARCH_REPO_FAIL = 'search_repo_fail';
 export const GET_REPO_DETAILS_START = 'get_repo_details_start';
 export const GET_REPO_DETAILS_SUCCESS = 'get_repo_details_success';
+export const GET_REPO_DETAILS_FAIL = 'get_repo_details_fail';
+export const ISSUE_FORM_UPDATE = 'issue_form_update';
+export const CREATE_ISSUE_START = 'create_issue_start';
+export const CREATE_ISSUE_SUCCESS = 'create_issue_success';
+export const CREATE_ISSUE_FAIL = 'create_issue_fail';
+
+// watch actions type constants
+export const WATCH_REPO = 'watch_repo';
+export const UNWATCH_REPO = 'unwatch_repo';

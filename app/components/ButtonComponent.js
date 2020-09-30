@@ -1,16 +1,23 @@
 import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View, Vibration } from 'react-native';
 import theme from '../theme';
 
 const ButtonComponent = ({
 	children, style, disabled, onPress
-}) => (
-	<TouchableWithoutFeedback onPress={onPress} disabled={disabled}>
-		<View style={[styles.button, style]}>
-			{children}
-		</View>
-	</TouchableWithoutFeedback>
-);
+}) => {
+	const _onButtonPress = () => {
+		Vibration.vibrate(10);
+		onPress();
+	};
+
+	return (
+		<TouchableWithoutFeedback onPress={_onButtonPress} disabled={disabled}>
+			<View style={[styles.button, style]}>
+				{children}
+			</View>
+		</TouchableWithoutFeedback>
+	)
+};
 
 const styles = StyleSheet.create({
 	button: {
@@ -25,4 +32,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export {ButtonComponent as Button };
+export { ButtonComponent as Button };

@@ -4,3 +4,4 @@ export * from './RepoListItemComponent';
 export * from './SeperatorComponent';
 export * from './ButtonComponent';
 export * from './IssueListItemComponent';
+export * from './LoaderComponent';
