@@ -1,6 +1,6 @@
 const config = {
 	BASE_URL: 'https://api.github.com/graphql',
-	GIT_TOKEN: '5086540aed4900d2a466e403e87c7282e5a9a747'
+	GIT_TOKEN: '' //add your Github PAT here
 }
   
 module.exports = config;

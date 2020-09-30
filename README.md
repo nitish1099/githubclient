@@ -52,4 +52,4 @@ npx react-native run-ios
 ```
 
 ## Screenshot
-![Screenshot](./screenshot.jpg)
+![Screenshot](./Screenshot.jpg)
