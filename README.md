@@ -34,7 +34,7 @@ npm install
 ### Usage 
 
 
-1. Setup the API endpoint in the React Native app
+1. Setup the Github Access Token in the React Native app
 ```bash
 inside app/config.js set the GIT_TOKEN to the personal access token created from the above step
 ```
